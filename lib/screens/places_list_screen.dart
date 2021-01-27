@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/great_places.dart';
+import '../providers/great_places.dart';
+import '../providers/great_places.dart';
 import '../screens/add_place_screen.dart';
 
 class PlacesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blueGrey[100],
       appBar: AppBar(
         title: Text('Your Places'),
         actions: [
@@ -16,8 +21,45 @@ class PlacesListScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: CircularProgressIndicator(),
+      body: Padding(
+        padding: EdgeInsets.all(10),
+        child: FutureBuilder(
+          future: Provider.of<GreatPlaces>(context, listen: false)
+              .fetchAndSetPlaces(),
+          builder: (ctx, snapshot) => snapshot.connectionState ==
+                  ConnectionState.waiting
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Consumer<GreatPlaces>(
+                  builder: (ctx, greatPlaces, ch) =>
+                      greatPlaces.items.length <= 0
+                          ? ch
+                          : ListView.builder(
+                              itemBuilder: (ctx, i) => Card(
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundImage:
+                                        FileImage(greatPlaces.items[i].image),
+                                  ),
+                                  title: Text(greatPlaces.items[i].title),
+                                  onTap: () {
+                                    // go to detail page...
+                                  },
+                                  trailing: IconButton(
+                                    icon: Icon(Icons.arrow_forward_ios),
+                                    onPressed: () {},
+                                  ),
+                                ),
+                                elevation: 5,
+                              ),
+                              itemCount: greatPlaces.items.length,
+                            ),
+                  child: Center(
+                    child: Text('Got no places Yet, start adding some!'),
+                  ),
+                ),
+        ),
       ),
     );
   }
