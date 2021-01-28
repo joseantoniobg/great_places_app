@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:great_places_app/screens/place_detail_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/great_places.dart';
 import '../screens/add_place_screen.dart';
@@ -30,48 +31,56 @@ class PlacesListScreen extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 )
               : Consumer<GreatPlaces>(
-                  builder: (ctx, greatPlaces, ch) => greatPlaces.items.length <=
-                          0
-                      ? ch
-                      : ListView.builder(
-                          itemBuilder: (ctx, i) => Card(
-                            child: ListTile(
-                              visualDensity: VisualDensity.comfortable,
-                              leading: Container(
-                                width: 50,
-                                height: 50,
-                                child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage:
-                                      FileImage(greatPlaces.items[i].image),
-                                ),
-                              ),
-                              title: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 8),
-                                child: Text(
-                                  greatPlaces.items[i].title,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                  builder: (ctx, greatPlaces, ch) =>
+                      greatPlaces.items.length <= 0
+                          ? ch
+                          : ListView.builder(
+                              itemBuilder: (ctx, i) => Card(
+                                child: ListTile(
+                                  visualDensity: VisualDensity.comfortable,
+                                  leading: Container(
+                                    width: 50,
+                                    height: 50,
+                                    child: CircleAvatar(
+                                      radius: 30,
+                                      backgroundImage:
+                                          FileImage(greatPlaces.items[i].image),
+                                    ),
+                                  ),
+                                  title: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                    child: Text(
+                                      greatPlaces.items[i].title,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  subtitle: Padding(
+                                      padding: EdgeInsets.only(bottom: 8),
+                                      child: Text(
+                                        greatPlaces.items[i].location.address,
+                                        style: TextStyle(fontSize: 12),
+                                      )),
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(
+                                        PlaceDetailScreen.routeName,
+                                        arguments: greatPlaces.items[i].id);
+                                  },
+                                  trailing: IconButton(
+                                    icon: Icon(Icons.arrow_forward_ios),
+                                    onPressed: () {
+                                      Navigator.of(context).pushNamed(
+                                          PlaceDetailScreen.routeName,
+                                          arguments: greatPlaces.items[i].id);
+                                    },
                                   ),
                                 ),
+                                elevation: 5,
                               ),
-                              subtitle: Padding(
-                                  padding: EdgeInsets.only(bottom: 8),
-                                  child: Text(
-                                      greatPlaces.items[i].location.address)),
-                              onTap: () {
-                                // go to detail page...
-                              },
-                              trailing: IconButton(
-                                icon: Icon(Icons.arrow_forward_ios),
-                                onPressed: () {},
-                              ),
+                              itemCount: greatPlaces.items.length,
                             ),
-                            elevation: 5,
-                          ),
-                          itemCount: greatPlaces.items.length,
-                        ),
                   child: Center(
                     child: Text('Got no places Yet, start adding some!'),
                   ),

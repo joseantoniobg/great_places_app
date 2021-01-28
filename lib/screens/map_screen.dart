@@ -5,21 +5,25 @@ import 'package:great_places_app/models/place.dart';
 class MapScreen extends StatefulWidget {
   final PlaceLocation initialLocation;
   final bool isSelecting;
+  LatLng pickedLocation;
 
   MapScreen(
       {this.initialLocation =
           const PlaceLocation(latitude: 37.5, longitude: -122.084),
-      this.isSelecting = false});
+      this.isSelecting = false}) {
+    if (!isSelecting) {
+      pickedLocation =
+          LatLng(initialLocation.latitude, initialLocation.longitude);
+    }
+  }
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
-  LatLng _pickedLocation;
-
   void _selectLocation(LatLng position) {
     setState(() {
-      _pickedLocation = position;
+      widget.pickedLocation = position;
     });
   }
 
@@ -32,10 +36,10 @@ class _MapScreenState extends State<MapScreen> {
           if (widget.isSelecting)
             IconButton(
                 icon: Icon(Icons.check),
-                onPressed: _pickedLocation == null
+                onPressed: widget.pickedLocation == null
                     ? null
                     : () {
-                        Navigator.of(context).pop(_pickedLocation);
+                        Navigator.of(context).pop(widget.pickedLocation);
                       }),
         ],
       ),
@@ -46,12 +50,12 @@ class _MapScreenState extends State<MapScreen> {
           zoom: 16,
         ),
         onTap: widget.isSelecting ? _selectLocation : null,
-        markers: _pickedLocation == null
+        markers: widget.pickedLocation == null
             ? null
             : {
                 Marker(
                   markerId: MarkerId('m1'),
-                  position: _pickedLocation,
+                  position: widget.pickedLocation,
                 ),
               },
       ),

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:great_places_app/screens/map_screen.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import '../models/place.dart';
 import '../providers/great_places.dart';
@@ -27,12 +30,20 @@ class PlaceDetailScreen extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(),
+          ),
+          SizedBox(
+            height: 10,
+          ),
           Text(
             p.location.address,
             style: TextStyle(
               fontSize: 20,
               color: Colors.grey,
             ),
+            textAlign: TextAlign.center,
           ),
           SizedBox(
             height: 10,
